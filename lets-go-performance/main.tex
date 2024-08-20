@@ -1,0 +1,50 @@
+\input{config.tex}
+
+\title{Analyzing and Improving Performance Issues with Go applications}
+
+\begin{document}
+    \pagenumbering{gobble}
+    \subsection*{Analyzing and Improving Performance issues with Go applications}
+    \subsubsection*{My Rep and why you should read this}
+    \begin{itemize}
+        \item wrote a programming language and made it 8x faster\footnote{\href{https://xnacly.me/posts/2023/language-performance/}{\texttt{https://xnacly.me/posts/2023/language-performance/}}}
+        \item go performance analysis and improvement using a leetcode example\footnote{\href{https://xnacly.me/posts/2023/leetcode-optimization/}{\texttt{https://xnacly.me/posts/2023/leetcode-optimization/}}}
+        \item Deep dive into Garbage collection at the examples of go and java\footnote{\href{https://xnacly.me/papers/modern_algorithms_for_gc.pdf}{\texttt{https://xnacly.me/papers/modern\_algorithms\_for\_gc.pdf}}}
+        \item implemented a jit compiler in go, made the runtime 14x faster \footnote{\href{https://xnacly.me/papers/tree-walk-vs-go-jit.pdf}{\texttt{https://xnacly.me/papers/tree-walk-vs-go-jit.pdf}}}
+        \item currently writing a JSON parser not substantially slower ($\pm1$ms) than \texttt{encoding/json}\footnote{\href{https://github.com/xNaCly/libjson}{\texttt{https://github.com/xNaCly/libjson}}}
+    \end{itemize}
+    \subsubsection*{The Three Considerations}
+    \begin{itemize}
+        \item Runtime
+        \item Memory usage and Allocations
+        \item I/O
+    \end{itemize}
+    \subsubsection*{Analyzing Applications}
+    \begin{minted}{go}
+package main;import p"runtime/pprof"
+func main() {
+    f, _ := os.Create("cpu.pprof")
+    p.StartCPUProfile(f)
+    defer p.StopCPUProfile()
+}
+    \end{minted}
+    \subsubsection*{General Performance Hints for Go}
+    \begin{itemize}
+        \item always preallocate slices and maps and benchmark optimal values
+        \item benchmark all changes and note their improvements \item use
+            \mintinline{go}{strings.Builder}, its faster than
+            \mintinline{go}{bytes.Buffer} \item if
+            \mintinline{go}{strings.Builder} is too slow, buffer in your own
+            \mintinline{go}{[]byte} and use
+            \mintinline{go}{*(*string)(unsafe.Pointer(&buf))} or
+            \mintinline{go}{unsafe.String(unsafe.SliceData(buf), len(buf))}
+            this reuses the memory already stored at \mintinline{go}{[]byte}
+        \item use \mintinline{go}{bufio.Reader} for batched I/O
+        \item if you make a lot of long living copies, as is often the case
+            with interpreters and parsers, either use an arena or pointers, it
+            can help
+        \item replace generic functions with specifically typed functions
+        \item always search for fast paths, the goal is to always do less
+    \end{itemize}
+\end{document}
+
