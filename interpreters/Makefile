@@ -1,7 +1,4 @@
-all: biber
-
-biber: main
-	biber interpreters
+all: main
 
 non-silent:
 	pdflatex -shell-escape -jobname=interpreters main 

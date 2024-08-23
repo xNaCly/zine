@@ -1,7 +1,4 @@
-all: biber
-
-biber: main
-	biber performance
+all: main
 
 non-silent:
 	pdflatex -shell-escape -jobname=performance main 
