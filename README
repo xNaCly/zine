@@ -1,0 +1,13 @@
+zine
+====
+
+A collection of zines i wrote for different projects 
+
+Build
+-----
+
+Each project is written in latex and requires latex-full, pygments as well as make.
+
+Build the pdf with:
+
+    make
