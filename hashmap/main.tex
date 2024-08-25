@@ -1,0 +1,25 @@
+\input{../config.tex}
+
+\title{On HashMaps and their Implementation}
+
+\begin{document}
+    \pagenumbering{gobble}
+    \subsection*{On HashMaps and Implementations}
+
+    \subsubsection*{Use case}
+
+    \subsubsection*{Hashes and Hashing functions}
+
+    A hash function $f$ maps a given input: $f(i) \rightarrow h$, $i$ to a hash
+    $h$. $f(i)$ has to always compute to $h$ for the same $i$, otherwise the
+    map would store values with the same key at the differing location. To keep
+    map access $O(1)$ and map insert $O(n)$, the hash function computes to an
+    integer. This integer is then used to index into an the underlying array.
+
+    \subsubsection*{Performance and the load factor} 
+
+    \subsubsection*{Dealing with Collisions}
+
+    \subsubsection*{Naiive Implementation}
+\end{document}
+
