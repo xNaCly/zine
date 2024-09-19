@@ -8,6 +8,10 @@
 
     \subsubsection*{Use case}
 
+    Hash maps are the backbone of fast running programs. They are used to
+    create caches, make searching really fast (for certain workloads faster
+    than search trees), index databases for fast lookups and to create sets.
+
     \subsubsection*{Hashes and Hashing functions}
 
     A hash function $f$ maps a given input: $f(i) \rightarrow h$, $i$ to a hash
@@ -30,13 +34,46 @@ for (int i = 0; i < s.length(); i++) {
 }
     \end{minted}
 
-    We will use a similar but better algorithm for hashing our key strings:
-    fnv1-a.
+    We will use a similar, but different algorithm for hashing our key strings:
+    fnv-1a
+    \footnote{\href{https://en.wikipedia.org/wiki/Fowler-Noll-Vo_hash_function}{Fnv
+    Hashing Wikipedia}}. The key of fnva-1a is to start with a large basis for
+    the hash, called the base, and modify it by xoring it with the current
+    character and multiplying it with a prime number, thus we can create the
+    first function of our naive implementation, \texttt{hash()}:
 
-    \subsubsection*{Performance and the load factor} 
+    \begin{minted}{c}
+const size_t BASE = 0x811c9dc5;
+const size_t PRIME = 0x01000193;
+size_t hash(Map *m, char *str) {
+    size_t initial = BASE;
+    while(*str) {
+        initial ^= *str++;
+        initial *= PRIME;
+    }
+    return initial & (m->cap - 1);
+}
+    \end{minted}
 
-    \subsubsection*{Dealing with Collisions}
+    The first things to notice, is the two constants required by fnva-1a, the
+    parameter of the hash function of the \texttt{Map} type and the bitwise and
+    in the return statement. The \texttt{m} parameter is used specifically in
+    combination with the bitwise \texttt{\&} to restrict the resulting hash to
+    the size of the underlying array, thus eliminating out of bounds errors.
 
-    \subsubsection*{Naiive Implementation}
+    \subsubsection*{Map Initialisation}
+
+    \begin{minted}{c}
+typedef struct Map { 
+    size_t size;
+    size_t cap;
+    void **buckets; 
+} Map;
+    \end{minted}
+
+    \subsubsection*{Pointer Insertion}
+    \subsubsection*{Pointer Extraction}
+    \subsubsection*{Excursion: Hash Collisions}
+    \subsubsection*{Excursion: Performance}
 \end{document}
 
