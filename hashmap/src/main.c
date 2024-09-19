@@ -12,8 +12,7 @@ const size_t PRIME = 0x01000193;
 size_t hash(Map *m, char *str) {
   size_t initial = BASE;
   while (*str) {
-    initial ^= *str++;
-    initial *= PRIME;
+    initial ^= *str++ * PRIME;
   }
   return initial & (m->cap - 1);
 }
