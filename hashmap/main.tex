@@ -6,7 +6,7 @@
     \pagenumbering{gobble}
     \subsection*{On Hash maps and their shortest implementation possible}
 
-    \subsubsection*{About Hash maps}
+    \paragraph*{About Hash maps}
 
     Explaining hash maps, their implementation and showing a very short but
     functioning implementation in c.
@@ -16,16 +16,20 @@
     search trees), they allow databases to create indexes for really fast
     lookups and they are used to create sets.
 
-    \subsubsection*{Hashes and Hashing functions}
+    \paragraph*{Hashes and Hashing functions}
 
     A hash function always computes the same integer for the same input, called
     a hash. This integer is then used to index into the underlying array of the
-    map.
+    map. If two differing inputs compute to the same hash, a hash collision
+    occurs - with this collision can be dealt by storing a list of elements at
+    the location the hash points to, thus allowing for more than one element
+    for each hash
+    \footnote{\href{https://en.wikipedia.org/wiki/Hash_collision}{https://en.wikipedia.org/wiki/Hash\_collision}}.
 
     Lets take a look at some common hashing applications: Java hashes strings
     by summing the characters of the string, while each is xored with the
     length. 
-    \footnote{\href{https://docs.oracle.com/javase/8/docs/api/java/lang/String.html\#hashCode}{String.hashCode()}}.
+    \footnote{\href{https://docs.oracle.com/javase/8/docs/api/java/lang/String.html\#hashCode}{https://docs.oracle.com/javase/8/docs/api/java/lang/String.html}}.
     \begin{minted}{java}
 var s = "Hello World";
 for (int i = 0, h = 0; i < s.length(); i++)
@@ -35,12 +39,12 @@ for (int i = 0, h = 0; i < s.length(); i++)
 
     We will use a similar, but different algorithm for hashing our key strings:
     fnv-1a
-    \footnote{\href{https://en.wikipedia.org/wiki/Fowler-Noll-Vo_hash_function}{Fnv
-    Hashing Wikipedia}}. The key of fnva-1a is to start with a default value
-    for the hash, called the base, modify it by xoring it with the current
-    character and then multiplying it with a prime number. On that basis we can
-    create the first function of our naive implementation, \texttt{hash()} to
-    hash our string keys:
+    \footnote{\href{https://en.wikipedia.org/wiki/Fowler-Noll-Vo_hash_function}{https://en.wikipedia.org/wiki/Fowler-Noll-Vo\_hash\_function}}.
+    The key of fnva-1a is to start with a default value for the hash, called
+    the base, modify it by xoring it with the current character and then
+    multiplying it with a prime number. On that basis we can create the first
+    function of our naive implementation, \texttt{hash()} to hash our string
+    keys:
 
     \begin{minted}{c}
 const size_t BASE = 0x811c9dc5;
@@ -59,7 +63,7 @@ size_t hash(Map *m, char *str) {
     \texttt{\&} to restrict the resulting hash to the size of the
     underlying array, thus eliminating out of bounds errors - this way
     of computing modulo is faster than \texttt{initial \% (m->cap-1)},
-    but only works for the cap being a power of too. We
+    but only works for the cap being a power of two. We
     control the size of the map, thus we can keep this in mind.
     \subsubsection*{Map Initialisation}
 
@@ -91,7 +95,7 @@ Map init(size_t cap) {
   return m;
 }
     \end{minted}
-    \subsubsection*{Pointer Insertion}
+    \paragraph*{Pointer Insertion}
 
     Inserting a pointer into the map consists of incrementing the size field,
     computing the hash and assigning the element at the index to the pointer we
@@ -104,7 +108,7 @@ void put(Map *m, char *str, void *value) {
 }
     \end{minted}
 
-    \subsubsection*{Pointer Extraction}
+    \paragraph*{Pointer Extraction}
     Extracting a pointer works the same way as the insertion: computing the
     hash and returning the value at the index:
 
@@ -115,7 +119,7 @@ void *get(Map *m, char *str) {
 }
     \end{minted}
 
-    \subsubsection*{Usage Example}
+    \paragraph*{Usage Example}
 
     The callee of the map functions can even insert pointers to stack
     variables, even if they do not outlive the scope. They also have
