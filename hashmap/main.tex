@@ -9,24 +9,24 @@
     \paragraph*{About Hash maps}
 
     Explaining hash maps, their implementation and showing a very short but
-    functioning implementation in c.
+    functioning implementation in C.
 
-    Hash maps are the backbone of fast running programs. Hash maps power
+    Hash maps are the backbone of fast running programs. They power
     caches, make searching really fast (for certain workloads faster than
-    search trees), they allow databases to create indexes for really fast
-    lookups and they are used to create sets.
+    search trees), allow databases to create indexes for really fast
+    lookups and are used to create sets.
 
     \paragraph*{Hashes and Hashing functions}
 
     A hash function always computes the same integer for the same input, called
     a hash. This integer is then used to index into the underlying array of the
     map. If two differing inputs compute to the same hash, a hash collision
-    occurs - with this collision can be dealt by storing a list of elements at
+    occurs - this collision can be dealt with, by storing a list of elements at
     the location the hash points to, thus allowing for more than one element
     for each hash
     \footnote{\href{https://en.wikipedia.org/wiki/Hash_collision}{https://en.wikipedia.org/wiki/Hash\_collision}}.
 
-    Lets take a look at some common hashing applications: Java hashes strings
+    Let's take a look at some common hashing applications: Java hashes strings
     by summing the characters of the string, while each is xored with the
     length. 
     \footnote{\href{https://docs.oracle.com/javase/8/docs/api/java/lang/String.html\#hashCode}{https://docs.oracle.com/javase/8/docs/api/java/lang/String.html}}.
@@ -42,7 +42,7 @@ for (int i = 0, h = 0; i < s.length(); i++)
     \footnote{\href{https://en.wikipedia.org/wiki/Fowler-Noll-Vo_hash_function}{https://en.wikipedia.org/wiki/Fowler-Noll-Vo\_hash\_function}}.
     The key of fnva-1a is to start with a default value for the hash, called
     the base, modify it by xoring it with the current character and then
-    multiplying it with a prime number. On that basis we can create the first
+    multiplying it with a prime number. On that basis, we can create the first
     function of our naive implementation, \texttt{hash()} to hash our string
     keys:
 
@@ -56,7 +56,7 @@ size_t hash(Map *m, char *str) {
 }
     \end{minted}
 
-    The first things to notice, is the two constants required by
+    The first things to notice is the two constants required by
     fnva-1a, the parameter of the hash function of the \texttt{Map}
     type and the bitwise and in the return statement. The \texttt{m}
     parameter is used specifically in combination with the bitwise
@@ -69,10 +69,10 @@ size_t hash(Map *m, char *str) {
 
     The Map structure contains the capacity, the size and the array of buckets,
     each bucket containing \mintinline{c}{void *}. This type can also just be a
-    value, such as a double. C however allows for erasing the type of a pointer
-    by casting it: \mintinline{c}{(void *)p}. Therefore this map can contain
-    any pointer and does not assume ownership over the value itself - the
-    downside is, the user has to cast the inserted and extracted pointers,
+    value, such as a double. C, however, allows for erasing the type of a
+    pointer by casting it: \mintinline{c}{(void *)p}. Therefore, this map can
+    contain any pointer and does not assume ownership over the value itself -
+    the downside is, the user has to cast the inserted and extracted pointers,
     while keeping track of their lifetimes.
 
     \begin{minted}{c}
