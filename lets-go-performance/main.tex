@@ -1,35 +1,35 @@
 \input{../config.tex}
 
-\title{Analyzing and Improving Performance Issues with Go applications}
+\title{Analyzing and Improving Performance Issues with Go Applications}
 
 \begin{document}
     \pagenumbering{gobble}
-    \subsection*{Analyzing and Improving Performance issues with Go applications}
+    \subsection*{Analyzing and Improving Performance Issues with Go Applications}
 
     The goal of every software developer should be to design and implement a
-    fun to use product - slow software is never fun to use. On the contrary,
+    fun-to-use product and slow software is never fun-to-use. On the contrary,
     making your own software faster is always a joy - so let me tell you about
     some things I found fun and practical when reworking Go applications around
     performance improvements.
 
-    Lets start of with some tales of mine and why you should even read this: I
+    Let's start off with some tales of mine and why you should even read this: I
     wrote an article about a leetcode solution and how I made it significantly
     faster\footnote{\href{https://xnacly.me/posts/2023/leetcode-optimization/}{\texttt{https://xnacly.me/posts/2023/leetcode-optimization/}}}.
     I created a programming language and made it 8 times faster
     afterwards\footnote{\href{https://xnacly.me/posts/2023/language-performance/}{\texttt{https://xnacly.me/posts/2023/language-performance/}}}.
-    I wrote a paper about garbage collection of programming languages with a
-    friend and Go was featured in
+    I wrote a paper about the garbage collection implementations of programming
+    languages with a friend and Go was featured in
     it\footnote{\href{https://xnacly.me/papers/modern_algorithms_for_gc.pdf}{\texttt{https://xnacly.me/papers/modern\_algorithms\_for\_gc.pdf}}}.
-    Furthermore I implemented a just in time compiler and made a go runtime for
-    a programming language 14 times
+    Furthermore, I implemented a just-in-time compiler and made a Go runtime
+    for a programming language, making it 14 times
     faster\footnote{\href{https://xnacly.me/papers/tree-walk-vs-go-jit.pdf}{\texttt{https://xnacly.me/papers/tree-walk-vs-go-jit.pdf}}}.
-    I also am currently working on a JSON parser for Go thats already beating
+    I also am currently working on a JSON parser for Go that's already beating
     the \texttt{encoding/json} package
     \footnote{\href{https://github.com/xNaCly/libjson}{\texttt{https://github.com/xNaCly/libjson}}}.
 
     \subsubsection*{Analyzing Applications}
 
-    To find areas for improvement, we can use the package go provides for this
+    To find areas for improvement, we can use the package Go provides for this
     exact purpose. This isn't the place to discuss specifics, but I recommend
     tinkering with the package.
 
@@ -43,12 +43,12 @@ func main() {
 }
     \end{minted}
 
-    An other way for analysation is to use \texttt{hyperfine} for comparing the
-    performance of two binaries.
+    Another way for conducting an analysis is to use \texttt{hyperfine} for
+    comparing the performance of two binaries.
 
     \subsubsection*{Performance Tips for Go}
 
-    Lets look at some specific Go tips and tricks for low hanging, fast
+    Let's look at some specific Go tips and tricks for low hanging, fast
     universal changes one can make to get better performance out of your
     existing code. The first specific tip is to start preallocating slices and
     maps with values determined with benchmarks:
@@ -77,9 +77,9 @@ BenchmarkStringLarge-4 0.003431 ns/op
     If these options are too slow for you, consider buffering in your own
     \mintinline{go}{[]byte} and use
     \mintinline{go}{*(*string)(unsafe.Pointer(&buf))} or
-    \mintinline{go}{unsafe.String(unsafe.SliceData(buf), len(buf))} this reuses
+    \mintinline{go}{unsafe.String(unsafe.SliceData(buf), len(buf))}, this reuses
     the memory already stored at \mintinline{go}{[]byte}. The latter option can
-    half the time spent in string concatenation - however both approaches use
+    half the time spent in string concatenation - however, both approaches use
     the unsafe package which makes no guarantees for portability and
     compatibility
     \footnote{\href{https://pkg.go.dev/unsafe}{\texttt{https://pkg.go.dev/unsafe}}}.
@@ -118,7 +118,7 @@ BenchmarkSpecific-4 0.0003494 ns/op
 
     To minimize the usage of expensive syscalls and batch input/output actions,
     the \texttt{bufio} package should always be used for files and other
-    file like structures.
+    file-like structures.
 
     The final tip is to use \texttt{(*bytes.Reader).ReadByte} instead of
     \texttt{(*bytes.Reader).ReadRune}.
